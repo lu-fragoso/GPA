@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "nome": "Lucas Oliveira",
+    "modulos": [
+      {
+        "id": 101,
+        "nome": "React Básico",
+        "descricao": "Aprenda os fundamentos do React."
+      },
+      {
+        "id": 102,
+        "nome": "React Avançado",
+        "descricao": "Componentes, hooks e roteamento."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "nome": "Ana Silva",
+    "modulos": [
+      {
+        "id": 201,
+        "nome": "HTML e CSS",
+        "descricao": "Fundamentos da web."
+      },
+      {
+        "id": 202,
+        "nome": "JavaScript",
+        "descricao": "Linguagem base para front-end."
+      }
+    ]
+  }
+]

@@ -25,12 +25,11 @@ export default function AlunoPage() {
     <div>
       <Header />
       <h1>Aluno: {aluno.nome}</h1>
-      <h3>Módulos:</h3>
+      <h3>Matérias:</h3>
       {aluno.modulos.map((modulo) => (
         <ModuloCard
           key={modulo.id}
           titulo={modulo.nome}
-          descricao={modulo.descricao}
           onConcluir={() => concluirModulo(modulo.id)}
         />
       ))}

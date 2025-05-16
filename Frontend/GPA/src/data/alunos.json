@@ -5,13 +5,11 @@
     "modulos": [
       {
         "id": 101,
-        "nome": "React Básico",
-        "descricao": "Aprenda os fundamentos do React."
+        "nome": "React Básico"
       },
       {
         "id": 102,
-        "nome": "React Avançado",
-        "descricao": "Componentes, hooks e roteamento."
+        "nome": "React Avançado"
       }
     ]
   },
@@ -21,13 +19,11 @@
     "modulos": [
       {
         "id": 201,
-        "nome": "HTML e CSS",
-        "descricao": "Fundamentos da web."
+        "nome": "HTML e CSS"
       },
       {
         "id": 202,
-        "nome": "JavaScript",
-        "descricao": "Linguagem base para front-end."
+        "nome": "JavaScript"
       }
     ]
   }

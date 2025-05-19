@@ -27,8 +27,8 @@ export default function AdminPage() {
     
 
       // Se for buscar do backend, descomente e ajuste URLs:
-       const resAlunos = await axios.get("http://localhost:3000/api/alunos");
-       const resCursos = await axios.get("http://localhost:3000/api/cursos");
+       const resAlunos = await axios.get("http://localhost:3000/alunos");
+       const resCursos = await axios.get("http://localhost:3000/cursos");
 
        setAlunos(resAlunos.data);
        setCursos(resCursos.data);

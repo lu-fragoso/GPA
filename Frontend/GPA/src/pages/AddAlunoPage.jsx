@@ -101,7 +101,7 @@ export default function AddAlunoPage() {
     try {
       
 
-       const resCursos = await axios.get("http://localhost:3000/api/cursos");
+       const resCursos = await axios.get("http://localhost:3000/cursos");
        
        setClasses(resCursos.data);
 
@@ -119,22 +119,21 @@ export default function AddAlunoPage() {
 
   const handleAddStudent = async (e) => {
   e.preventDefault();
-  setLoading(true);
-  setError(null);
+
 
   if (studentName.trim() === "") {
     alert("Nome do aluno não pode estar vazio!");
-    setLoading(false);
+   
     return;
   }
   if (studentsAge === "") {
     alert("Idade do aluno não pode estar vazia!");
-    setLoading(false);
+   
     return;
   }
   if (studentsClass === "") {
     alert("Selecione uma turma!");
-    setLoading(false);
+    
     return;
   }
 
@@ -147,16 +146,16 @@ export default function AddAlunoPage() {
     };
 
     // Cria aluno
-    const response = await axios.post("http://localhost:3000/api/alunos", payload);
+    const response = await axios.post("http://localhost:3000/alunos", payload);
     const alunoId = response.data.id;
 
     // Pega módulos da matéria
-    const resModulos = await axios.get(`http://localhost:3000/api/modulos?curso_id=${studentsClass}`);
+    const resModulos = await axios.get(`http://localhost:3000/modulos?curso_id=${studentsClass}`);
     const modulosDaMateria = resModulos.data;
 
     // Cria progresso inicial para cada módulo (concluido: false)
     for (const modulo of modulosDaMateria) {
-      await axios.post("http://localhost:3000/api/progresso_modulos", {
+      await axios.post("http://localhost:3000/progresso_modulos", {
         aluno_id: alunoId,
         curso_id: studentsClass,
         modulo_id: modulo.id,
@@ -168,9 +167,13 @@ export default function AddAlunoPage() {
     navigate("/admin");
   } catch (error) {
     console.error("Erro ao cadastrar aluno:", error);
-    setError("Erro ao cadastrar aluno");
+    alert("Erro ao cadastrar aluno. Tente novamente.");
   } finally {
-    setLoading(false);
+    setStudentName("");
+    setStudentsAge("");
+    setstudentsEmail("");
+    setStudentsClass("");
+   
   }
 };
 

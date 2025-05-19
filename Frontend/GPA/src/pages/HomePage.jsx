@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import alunos from "../data/alunos.json";
 
 export default function HomePage() {
   const [mostrarLogin, setMostrarLogin] = useState(false);
@@ -12,12 +13,18 @@ export default function HomePage() {
   const handleLogin = (e) => {
     e.preventDefault();
     // Simulação de autenticação
-    if (usuario === "admin" && senha === "1234") {
+    if (usuario === "admin" && senha === "admin1234") {
+      sessionStorage.setItem("usuarioLogado", JSON.stringify({ perfil: "admin", usuario }));
       navigate("/admin");
-    } else if (usuario === "aluno" && senha === "1234") {
-      navigate("/aluno/1");
     } else {
-      alert("Credenciais inválidas.");
+      const alunoEncontrado = alunos.find((a) => a.email === usuario);
+
+      if (alunoEncontrado && senha === "12345") {
+        sessionStorage.setItem("usuarioLogado", JSON.stringify({ perfil: "aluno", usuario, id: alunoEncontrado.id }));
+        navigate(`/aluno/${alunoEncontrado.id}`);
+      } else {
+        alert("Credenciais inválidas.");
+      }
     }
   };
 
@@ -31,7 +38,7 @@ export default function HomePage() {
         {!mostrarLogin ? (
           <button
             onClick={() => setMostrarLogin(true)}
-            style={{ marginTop: "1rem", padding: "0.5rem 1rem" }}
+            style={{ marginTop: "1rem", padding: "0.5rem 1rem", textAlign: "center",}}
           >
             Login
           </button>
@@ -47,9 +54,11 @@ export default function HomePage() {
               borderRadius: "8px",
             }}
           >
-            <h3>Login</h3>
-            <div>
-              <label>Usuário:</label>
+
+            <h3 style={{textAlign: "center"}}>Login</h3>
+            <div style={{ marginTop: "0.5rem" }}>
+              <label style={{marginRight: 410 }}>Usuário:</label>
+            
               <input
                 value={usuario}
                 onChange={(e) => setUsuario(e.target.value)}
@@ -57,7 +66,7 @@ export default function HomePage() {
               />
             </div>
             <div style={{ marginTop: "0.5rem" }}>
-              <label>Senha:</label>
+              <label style={{marginRight: 410 }}>Senha:</label>
               <input
                 type="password"
                 value={senha}

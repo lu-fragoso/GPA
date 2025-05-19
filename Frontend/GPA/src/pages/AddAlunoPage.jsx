@@ -4,85 +4,185 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import materias from "../data/materias.json";
 
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
+  },
+  content: {
+    flex: 1,
+    maxWidth: 480,
+    margin: "40px auto",
+    padding: "0 16px",
+    display: "flex",
+    flexDirection: "column",
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "700",
+    marginBottom: 24,
+    color: "#111827",
+    textAlign: "center",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+  },
+  input: {
+    padding: "12px 16px",
+    fontSize: 16,
+    borderRadius: 8,
+    border: "1.5px solid #d1d5db",
+    outline: "none",
+    transition: "border-color 0.3s, box-shadow 0.3s",
+  },
+  inputFocus: {
+    borderColor: "#2563eb",
+    boxShadow: "0 0 6px rgba(37, 99, 235, 0.5)",
+  },
+  select: {
+    padding: "12px 16px",
+    fontSize: 16,
+    borderRadius: 8,
+    border: "1.5px solid #d1d5db",
+    outline: "none",
+    transition: "border-color 0.3s, box-shadow 0.3s",
+    backgroundColor: "#fff",
+  },
+  button: {
+    backgroundColor: "#333",
+    color: "white",
+    fontWeight: "700",
+    fontSize: 16,
+    padding: "12px 0",
+    borderRadius: 8,
+    border: "none",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  },
+  buttonHover: {
+    backgroundColor: "#1e40af",
+  },
+  errorMessage: {
+    color: "#b91c1c",
+    fontWeight: "600",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  formContainer: {
+  border: "2px ",  // borda azul sólida
+  borderRadius: 12,
+  padding: 24,
+  marginTop: 20,
+  boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)", // sombra leve
+  backgroundColor: "#ffffff",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  maxWidth: 600,   // largura máxima maior
+  width: "90%",    // largura relativa à tela, até o maxWidth
+},
+};
 
 export default function AddAlunoPage() {
-  
- const [studentName, setStudentName] = useState("");
- const [studentsAge, setStudentsAge] = useState("");
- const [studentsClass, setStudentsClass] = useState("");
- const [classes, setClasses] = useState([]); // estado para armazenar as turmas
- const navigate = useNavigate();
+  const [studentName, setStudentName] = useState("");
+  const [studentsAge, setStudentsAge] = useState("");
+  const [studentsClass, setStudentsClass] = useState("");
+  const [classes, setClasses] = useState([]);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [hoverButton, setHoverButton] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    handlegetData();
-  }, []);
-  
-  const handlegetData = () => {
     setClasses(materias);
-  }
+  }, []);
 
   const handleAddStudent = () => {
-    // Aqui futuramente você insere no banco Cassandra via API
     if (studentName.trim() === "") {
-        alert("Nome do aluno não pode estar vazio!");
+      alert("Nome do aluno não pode estar vazio!");
+      return;
     }
     if (studentsAge === "") {
       alert("Idade do aluno não pode estar vazia!");
       return;
     }
-
-        if (studentsClass === "") {
+    if (studentsClass === "") {
       alert("Selecione uma turma!");
       return;
     }
-    console.log("Novo aluno:", { studentName, studentPassword });
+    console.log("Novo aluno:", { studentName, studentsAge, studentsClass });
 
     // Após cadastrar, volta para AdminPage
     navigate("/admin");
   };
 
   return (
-    
-    <div>
-        <Header />
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-6">Adicionar Aluno</h1>
-            <div className="flex flex-col gap-4">
+     <div style={styles.container}>
+      <Header />
+      <main style={styles.content}>
+
+        <div style={styles.formContainer}>
+        <h1 style={styles.title}>Adicionar Aluno</h1>
+          <div style={styles.form}>
             <input
-                type="text"
-                placeholder="Nome do Aluno"
-                value={studentName}
-                onChange={(e) => setStudentName(e.target.value)}
-                className="border rounded p-2"
+              type="text"
+              placeholder="Nome do Aluno"
+              value={studentName}
+              onChange={(e) => setStudentName(e.target.value)}
+              style={{
+                ...styles.input,
+                ...(focusedInput === "name" ? styles.inputFocus : {}),
+              }}
+              onFocus={() => setFocusedInput("name")}
+              onBlur={() => setFocusedInput(null)}
             />
+
             <input
-                type="number"
-                placeholder="Idade do Aluno"
-                value={studentsAge}
-                onChange={(e) => setStudentsAge(e.target.value)}
-                className="border rounded p-2"
+              type="number"
+              placeholder="Idade do Aluno"
+              value={studentsAge}
+              onChange={(e) => setStudentsAge(e.target.value)}
+              style={{
+                ...styles.input,
+                ...(focusedInput === "age" ? styles.inputFocus : {}),
+              }}
+              onFocus={() => setFocusedInput("age")}
+              onBlur={() => setFocusedInput(null)}
             />
+
             <select
-            value={studentsClass}
-            onChange={(e) => setStudentsClass(e.target.value)}
-            className="border rounded p-2"
-          >
-            <option value="">Selecione a Turma</option>
-            {classes.map((turma) => (
-              <option key={turma.id} value={turma.nome}>
-                {turma.name}
-              </option>
-            ))}
-          </select>
-            <button
-                onClick={handleAddStudent}
-                className="bg-blue-500 text-white px-3 py-1 rounded"
+              value={studentsClass}
+              onChange={(e) => setStudentsClass(e.target.value)}
+              style={{
+                ...styles.select,
+                ...(focusedInput === "class" ? styles.inputFocus : {}),
+              }}
+              onFocus={() => setFocusedInput("class")}
+              onBlur={() => setFocusedInput(null)}
             >
-                Adicionar Aluno
+              <option value="">Selecione a Turma</option>
+              {classes.map((turma) => (
+                <option key={turma.id} value={turma.nome}>
+                  {turma.nome}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={handleAddStudent}
+              style={hoverButton ? { ...styles.button, ...styles.buttonHover } : styles.button}
+              onMouseEnter={() => setHoverButton(true)}
+              onMouseLeave={() => setHoverButton(false)}
+            >
+              Adicionar Aluno
             </button>
-            </div>
+          </div>
         </div>
-        <Footer />
+      </main>
+      <Footer />
     </div>
   );
 }

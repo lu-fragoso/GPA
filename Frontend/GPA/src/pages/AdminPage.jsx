@@ -2,35 +2,54 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import materias from "../data/materias.json";
-import alunos from "../data/alunos.json";
-
+import axios from "axios";
 
 export default function AdminPage() {
 
-  const [students, setStudents] = useState([]);
-  const [materiasList, setMateriasList] = useState([]);
-  const [materiaFiltro, setMateriaFiltro] = useState("");
-  const [alunoFiltro, setAlunoFiltro] = useState("");
+  // Estados para os dados
+  const [alunos, setAlunos] = useState([]);
+  const [cursos, setCursos] = useState([]);
 
+  // Estados para filtro
+  const [filtroAluno, setFiltroAluno] = useState("");
+  const [filtroCurso, setFiltroCurso] = useState("");
+ 
   const navigate = useNavigate();
 
+
   useEffect(() => {
-    handlegetData();
+    handleGetData();
   }, []);
 
-  const handlegetData = () => {
-    setMateriasList(materias);
-    setStudents(alunos);
+  // Função para carregar dados (ajustada para futuramente buscar do backend)
+  const handleGetData = async () => {
+    try {
+    
+
+      // Se for buscar do backend, descomente e ajuste URLs:
+       const resAlunos = await axios.get("http://localhost:3000/api/alunos");
+       const resCursos = await axios.get("http://localhost:3000/api/cursos");
+
+       setAlunos(resAlunos.data);
+       setCursos(resCursos.data);
+
+      
+    } catch (err) {
+      console.error("Erro ao buscar dados:", err);
+          
+    }
   };
 
-  const materiasFiltradas = materiasList.filter((materia) =>
-    materia.nome.toLowerCase().includes(materiaFiltro.toLowerCase())
+  // Aplicar filtros nas listas
+  const alunosFiltrados = alunos.filter((aluno) =>
+    aluno.nome.toLowerCase().includes(filtroAluno.toLowerCase())
   );
 
-  const alunosFiltrados = students.filter((student) =>
-    student.nome.toLowerCase().includes(alunoFiltro.toLowerCase())
+  const cursosFiltrados = cursos.filter((curso) =>
+    curso.nome.toLowerCase().includes(filtroCurso.toLowerCase())
   );
+
+
 
   return (
     <div className="flex flex-col" style={{ height: "100vh" }}>
@@ -78,8 +97,8 @@ export default function AdminPage() {
         <input
               type="text"
               placeholder="Buscar matéria..."
-              value={materiaFiltro}
-              onChange={(e) => setMateriaFiltro(e.target.value)}
+              value={filtroCurso}
+              onChange={(e) => setFiltroCurso(e.target.value)}
               style={{
                 border: "1px solid #e5e7eb",
                 borderRadius: "8px",
@@ -100,7 +119,7 @@ export default function AdminPage() {
                 overflowY: "auto",
               }}
             >
-              {materiasFiltradas.map((materia) => (
+              {cursosFiltrados.map((materia) => (
                 <li
                   key={materia.id}
                   style={{
@@ -163,8 +182,8 @@ export default function AdminPage() {
         <input
               type="text"
               placeholder="Buscar aluno..."
-              value={alunoFiltro}
-              onChange={(e) => setAlunoFiltro(e.target.value)}
+              value={filtroAluno}
+              onChange={(e) => setFiltroAluno(e.target.value)}
               style={{
                 border: "1px solid #e5e7eb",
                 borderRadius: "8px",

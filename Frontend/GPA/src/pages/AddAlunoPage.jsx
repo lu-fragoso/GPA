@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import materias from "../data/materias.json";
+import axios from "axios";
 
 const styles = {
   container: {
@@ -90,34 +90,90 @@ const styles = {
 export default function AddAlunoPage() {
   const [studentName, setStudentName] = useState("");
   const [studentsAge, setStudentsAge] = useState("");
+  const [studentsEmail, setstudentsEmail] = useState("");
   const [studentsClass, setStudentsClass] = useState("");
   const [classes, setClasses] = useState([]);
   const [focusedInput, setFocusedInput] = useState(null);
   const [hoverButton, setHoverButton] = useState(false);
   const navigate = useNavigate();
 
+  const handleGetData = async () => {
+    try {
+      
+
+       const resCursos = await axios.get("http://localhost:3000/api/cursos");
+       
+       setClasses(resCursos.data);
+
+     
+    } catch (err) {
+      console.error("Erro ao buscar dados:", err);
+    }
+     
+  };
+
+
   useEffect(() => {
-    setClasses(materias);
+    handleGetData();
   }, []);
 
-  const handleAddStudent = () => {
-    if (studentName.trim() === "") {
-      alert("Nome do aluno não pode estar vazio!");
-      return;
-    }
-    if (studentsAge === "") {
-      alert("Idade do aluno não pode estar vazia!");
-      return;
-    }
-    if (studentsClass === "") {
-      alert("Selecione uma turma!");
-      return;
-    }
-    console.log("Novo aluno:", { studentName, studentsAge, studentsClass });
+  const handleAddStudent = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
 
-    // Após cadastrar, volta para AdminPage
+  if (studentName.trim() === "") {
+    alert("Nome do aluno não pode estar vazio!");
+    setLoading(false);
+    return;
+  }
+  if (studentsAge === "") {
+    alert("Idade do aluno não pode estar vazia!");
+    setLoading(false);
+    return;
+  }
+  if (studentsClass === "") {
+    alert("Selecione uma turma!");
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const payload = {
+      nome: studentName,
+      idade: parseInt(studentsAge, 10),
+      email: studentsEmail,
+      curso: studentsClass,
+    };
+
+    // Cria aluno
+    const response = await axios.post("http://localhost:3000/api/alunos", payload);
+    const alunoId = response.data.id;
+
+    // Pega módulos da matéria
+    const resModulos = await axios.get(`http://localhost:3000/api/modulos?curso_id=${studentsClass}`);
+    const modulosDaMateria = resModulos.data;
+
+    // Cria progresso inicial para cada módulo (concluido: false)
+    for (const modulo of modulosDaMateria) {
+      await axios.post("http://localhost:3000/api/progresso_modulos", {
+        aluno_id: alunoId,
+        curso_id: studentsClass,
+        modulo_id: modulo.id,
+        concluido: false,
+      });
+    }
+
+    alert("Aluno cadastrado com sucesso!");
     navigate("/admin");
-  };
+  } catch (error) {
+    console.error("Erro ao cadastrar aluno:", error);
+    setError("Erro ao cadastrar aluno");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
      <div style={styles.container}>
@@ -132,6 +188,19 @@ export default function AddAlunoPage() {
               placeholder="Nome do Aluno"
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
+              style={{
+                ...styles.input,
+                ...(focusedInput === "name" ? styles.inputFocus : {}),
+              }}
+              onFocus={() => setFocusedInput("name")}
+              onBlur={() => setFocusedInput(null)}
+            />
+
+            <input
+              type="text"
+              placeholder="E-mail do Aluno"
+              value={studentsEmail}
+              onChange={(e) => setstudentsEmail(e.target.value)}
               style={{
                 ...styles.input,
                 ...(focusedInput === "name" ? styles.inputFocus : {}),

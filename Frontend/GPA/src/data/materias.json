@@ -1,0 +1,37 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "nome": "Matemática Básica",
+    "descricao": "Curso introdutório de matemática para estudantes do ensino fundamental.",
+    "duracao": 60,
+    "nivel": "Iniciante"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "nome": "História do Brasil",
+    "descricao": "Estudo sobre os principais eventos históricos do Brasil.",
+    "duracao": 40,
+    "nivel": "Intermediário"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "nome": "Introdução à Programação",
+    "descricao": "Curso básico de lógica de programação e algoritmos.",
+    "duracao": 80,
+    "nivel": "Iniciante"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "nome": "Geografia Mundial",
+    "descricao": "Exploração das características geográficas dos continentes e países.",
+    "duracao": 50,
+    "nivel": "Intermediário"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "nome": "Física Aplicada",
+    "descricao": "Curso avançado de física com aplicações práticas.",
+    "duracao": 90,
+    "nivel": "Avançado"
+  }
+]

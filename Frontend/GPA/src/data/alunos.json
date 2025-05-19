@@ -1,30 +1,17 @@
 [
   {
-    "id": 1,
+    "id": "1c9a9e56-3769-4a2b-bf44-013d2ee3a14e",
     "nome": "Lucas Oliveira",
-    "modulos": [
-      {
-        "id": 101,
-        "nome": "React Básico"
-      },
-      {
-        "id": 102,
-        "nome": "React Avançado"
-      }
-    ]
+    "email": "lucas@email.com",
+    "idade": 22,
+    "turma": [ "550e8400-e29b-41d4-a716-446655440003", "550e8400-e29b-41d4-a716-446655440004"]
   },
   {
-    "id": 2,
+    "id": "5e8b7dc5-1d3f-4a0b-81d5-5b345a85e4d7",
     "nome": "Ana Silva",
-    "modulos": [
-      {
-        "id": 201,
-        "nome": "HTML e CSS"
-      },
-      {
-        "id": 202,
-        "nome": "JavaScript"
-      }
-    ]
+    "email": "ana@email.com",
+    "idade": 20,
+    "turma": ["550e8400-e29b-41d4-a716-446655440004" , "550e8400-e29b-41d4-a716-446655440000"]
+    
   }
 ]

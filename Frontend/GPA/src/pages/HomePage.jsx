@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect  } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ export default function HomePage() {
   // Ao montar o componente, carrega a lista de alunos do backend
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/alunos")  // rota do backend que retorna alunos
+      .get("http://localhost:3000/api/alunos")  // rota do backend que retorna alunos
       .then((res) => {
         setAlunos(res.data);  // salva no estado alunos
       })

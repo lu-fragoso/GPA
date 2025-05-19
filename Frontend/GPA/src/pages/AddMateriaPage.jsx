@@ -13,27 +13,25 @@ export default function AddMateriaPage() {
 
   const handleAddClass = async (e) => {
   e.preventDefault();
-  setLoading(true);
-  setErro(null);
 
   if (className.trim() === "") {
     alert("Nome da matéria não pode estar vazio!");
-    setLoading(false);
+   
     return;
   }
   if (classDescription.trim() === "") {
     alert("Descrição da matéria não pode estar vazia!");
-    setLoading(false);
+
     return;
   }
   if (classTime.trim() === "") {
     alert("Duração da matéria não pode estar vazia!");
-    setLoading(false);
+  
     return;
   }
   if (classLevel.trim() === "") {
     alert("Nível da matéria não pode estar vazio!");
-    setLoading(false);
+   
     return;
   }
 
@@ -47,15 +45,19 @@ export default function AddMateriaPage() {
       nivel: classLevel,
     };
 
-    const response = await axios.post("http://localhost:3000/api/materias", payload);
+    const response = await axios.post("http://localhost:3000/cursos", payload);
   
 
     navigate("/admin"); // Navega só se deu certo
   } catch (error) {
-    setErro("Erro ao criar matéria. Tente novamente.");
+    alert("Erro ao adicionar matéria. Tente novamente.");
     console.error(error);
   } finally {
-    setLoading(false); // Sempre desliga o loading
+    setClassName("");
+    setClassDescription("");
+    setClassTime("");
+    setClassLevel("");
+    
   }
 };
 

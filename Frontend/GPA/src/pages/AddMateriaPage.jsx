@@ -1,86 +1,160 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import axios from "axios";
 
 export default function AddMateriaPage() {
-  
- const [className, setClassName] = useState("");
- const [classDescription, setClassDescription] = useState("");
- const [classTime, setClassTime] = useState("");
- const [classLevel, setClassLevel] = useState("");
- const navigate = useNavigate();
+  const [className, setClassName] = useState("");
+  const [classDescription, setClassDescription] = useState("");
+  const [classTime, setClassTime] = useState("");
+  const [classLevel, setClassLevel] = useState("");
+  const navigate = useNavigate();
 
   const handleAddClass = () => {
-    // Aqui futuramente você insere no banco Cassandra via API
     if (className.trim() === "") {
-        alert("Nome da matéria não pode estar vazio!");
+      alert("Nome da matéria não pode estar vazio!");
+      return;
     }
     if (classDescription.trim() === "") {
-        alert("Descrição da matéria não pode estar vazia!");
-        return;
+      alert("Descrição da matéria não pode estar vazia!");
+      return;
     }
     if (classTime.trim() === "") {
-        alert("Duração da matéria não pode estar vazia!");
-        return;
+      alert("Duração da matéria não pode estar vazia!");
+      return;
     }
     if (classLevel.trim() === "") {
-        alert("Nível da matéria não pode estar vazio!");
-        return;
+      alert("Nível da matéria não pode estar vazio!");
+      return;
     }
-    console.log("Nova matéria:", { className, classDescription, classTime, classLevel });
-    // Aqui você pode fazer uma requisição para a API para adicionar a matéria    
 
-    // Após cadastrar, volta para AdminPage
+    console.log("Nova matéria:", { className, classDescription, classTime, classLevel });
+
+    // Aqui pode inserir a chamada API para salvar a matéria
+
     navigate("/admin");
   };
 
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      minHeight: "100vh",
+    },
+    content: {
+      flex: 1,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "start",
+      padding: 24,
+      backgroundColor: "#f9fafb",
+    },
+    formBox: {
+      backgroundColor: "#fff",
+      borderRadius: 12,
+      padding: 32,
+      boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)",
+      width: "100%",
+      maxWidth: 600,
+      display: "flex",
+      flexDirection: "column",
+      gap: 16,
+    },
+    title: {
+      fontSize: "2rem",
+      fontWeight: "700",
+      marginBottom: 24,
+      color: "#333",
+      textAlign: "center",
+    },
+    input: {
+      border: "1.5px solid #cbd5e1",
+      borderRadius: 8,
+      padding: "12px 16px",
+      fontSize: 16,
+      outline: "none",
+      transition: "border-color 0.2s",
+    },
+    inputFocus: {
+      borderColor: "#2563eb",
+    },
+    button: {
+      backgroundColor: "#333",
+      color: "white",
+      padding: "12px 16px",
+      fontSize: 16,
+      fontWeight: "600",
+      border: "none",
+      borderRadius: 8,
+      cursor: "pointer",
+      transition: "background-color 0.3s",
+    },
+    buttonHover: {
+      backgroundColor: "#1e40af",
+    },
+  };
+
+  // State para hover no botão (opcional, para melhor UX)
+  const [isHover, setIsHover] = useState(false);
+
   return (
-    
-    <div>
-        <Header />
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-6">Adicionar matéria</h1>
-            <div className="flex flex-col gap-4">
-            <input
-                type="text"
-                placeholder="Nome do matéria"
-                value={className}
-                onChange={(e) => setClassName(e.target.value)}
-                className="border rounded p-2"
-            />
-            <input
-                type="text"
-                placeholder="Descrição do matéria"
-                value={classDescription}
-                onChange={(e) => setClassDescription(e.target.value)}
-                className="border rounded p-2"
-            />
-            <input
-                type="number"
-                placeholder="Duração do matéria (minutos)" 
-                value={classTime}
-                onChange={(e) => setClassTime(e.target.value)}
-                className="border rounded p-2"
-            />
-            <input
-                type="text"
-                placeholder="Nível"
-                value={classLevel}
-                onChange={(e) => setClassLevel(e.target.value)}
-                className="border rounded p-2"
-            />
-            
-            <button
-                onClick={handleAddClass}
-                className="bg-blue-500 text-white px-3 py-1 rounded"
-            >
-                Adicionar Matéria
-            </button>
-            </div>
+    <div style={styles.container}>
+      <Header />
+      <main style={styles.content}>
+        <div style={styles.formBox}>
+          <h1 style={styles.title}>Adicionar Matéria</h1>
+
+          <input
+            type="text"
+            placeholder="Nome da matéria"
+            value={className}
+            onChange={(e) => setClassName(e.target.value)}
+            style={styles.input}
+            onFocus={(e) => (e.target.style.borderColor = "#2563eb")}
+            onBlur={(e) => (e.target.style.borderColor = "#cbd5e1")}
+          />
+
+          <input
+            type="text"
+            placeholder="Descrição da matéria"
+            value={classDescription}
+            onChange={(e) => setClassDescription(e.target.value)}
+            style={styles.input}
+            onFocus={(e) => (e.target.style.borderColor = "#2563eb")}
+            onBlur={(e) => (e.target.style.borderColor = "#cbd5e1")}
+          />
+
+          <input
+            type="number"
+            placeholder="Duração da matéria (minutos)"
+            value={classTime}
+            onChange={(e) => setClassTime(e.target.value)}
+            style={styles.input}
+            onFocus={(e) => (e.target.style.borderColor = "#2563eb")}
+            onBlur={(e) => (e.target.style.borderColor = "#cbd5e1")}
+          />
+
+          <input
+            type="text"
+            placeholder="Nível"
+            value={classLevel}
+            onChange={(e) => setClassLevel(e.target.value)}
+            style={styles.input}
+            onFocus={(e) => (e.target.style.borderColor = "#2563eb")}
+            onBlur={(e) => (e.target.style.borderColor = "#cbd5e1")}
+          />
+
+          <button
+            style={isHover ? { ...styles.button, ...styles.buttonHover } : styles.button}
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+            onClick={handleAddClass}
+          >
+            Adicionar Matéria
+          </button>
         </div>
-        <Footer />
+      </main>
+      <Footer />
     </div>
   );
 }

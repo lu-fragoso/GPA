@@ -1,4 +1,4 @@
-:root {
+/*:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -11,8 +11,53 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}*/
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+header {
+  width: 100%;
+  background-color: #658C6F;
+  padding: 1rem;
+}
+
+.header-container, h1 {
+  max-width: 1200px;
+  margin: 1rem;
+  padding: rem;
+  color:aliceblue
+}
+
+
+footer {
+  width: 100%;
+  background: #BFBFBF;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  padding-bottom: 20px;
+  margin-top: 30px;
+}
+
+.footer-container {
+  padding-top: 35px;
+}
+
+/*
 a {
   font-weight: 500;
   color: #646cff;
@@ -34,7 +79,7 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
+/* 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -69,3 +114,4 @@ button:focus-visible {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+*/

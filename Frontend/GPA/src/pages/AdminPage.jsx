@@ -35,7 +35,7 @@ export default function AdminPage() {
   return (
     <div className="flex flex-col" style={{ height: "100vh" }}>
   {/* Header */}
-  <Header />
+  <Header/>
 
   {/* Conteúdo com rolagem central */}
   <div
@@ -46,10 +46,10 @@ export default function AdminPage() {
       overflowY: "auto",
       padding: "24px",
       backgroundColor: "#f9fafb",
-      paddingBottom: "100px", // reserva espaço pro footer
+      paddingBottom: "200px" // reserva espaço pro footer
     }}
   >
-    <h1 className="text-3xl font-bold mb-6">Página Administrativa</h1>
+    <h1 style={{color: "black"}}>Página Administrativa</h1>
 
     {/* Container horizontal */}
     <div
@@ -72,12 +72,14 @@ export default function AdminPage() {
           backgroundColor: "#fff",
           display: "flex",
           flexDirection: "column",
+          fontFamily: "sans-serif",
+          paddingBottom: "15px",
         }}
       >
-        <h2 className="text-2xl font-semibold mb-4">Matérias</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{paddingBottom: "10px"}}>Matérias</h2>
         <input
               type="text"
-              placeholder="Buscar matéria..."
+              placeholder="Buscar matéria" 
               value={materiaFiltro}
               onChange={(e) => setMateriaFiltro(e.target.value)}
               style={{
@@ -87,6 +89,7 @@ export default function AdminPage() {
                 marginBottom: "12px",
                 fontSize: "14px",
                 outline: "none",
+                backgroundColor: "#D9D9D9",
               }}
             />
 
@@ -96,7 +99,7 @@ export default function AdminPage() {
                 borderRadius: "8px",
                 padding: "16px",
                 height: "100%",
-                maxHeight: "200px",
+                maxHeight: "300px",
                 overflowY: "auto",
               }}
             >
@@ -114,7 +117,7 @@ export default function AdminPage() {
                   }}
                   onClick={() => navigate(`/admin/materia/${materia.id}`)}
                   onMouseOver={(e) =>
-                    (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                    (e.currentTarget.style.backgroundColor = "#EEF2CE")
                   }
                   onMouseOut={(e) =>
                     (e.currentTarget.style.backgroundColor = "transparent")
@@ -159,10 +162,10 @@ export default function AdminPage() {
           flexDirection: "column",
         }}
       >
-        <h2 className="text-2xl font-semibold mb-4">Alunos</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{paddingBottom: "10px"}}>Alunos</h2>
         <input
               type="text"
-              placeholder="Buscar aluno..."
+              placeholder="Buscar aluno"
               value={alunoFiltro}
               onChange={(e) => setAlunoFiltro(e.target.value)}
               style={{
@@ -172,6 +175,7 @@ export default function AdminPage() {
                 marginBottom: "12px",
                 fontSize: "14px",
                 outline: "none",
+                backgroundColor: "#D9D9D9",
               }}
             />
 
@@ -181,7 +185,7 @@ export default function AdminPage() {
                 borderRadius: "8px",
                 padding: "16px",
                 height: "100%",
-                maxHeight: "200px",
+                maxHeight: "300px",
                 overflowY: "auto",
               }}
             >
@@ -199,7 +203,7 @@ export default function AdminPage() {
                   }}
                   onClick={() => navigate(`/admin/aluno/${student.id}`)}
                   onMouseOver={(e) =>
-                    (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                    (e.currentTarget.style.backgroundColor = "#E4F2AE")
                   }
                   onMouseOut={(e) =>
                     (e.currentTarget.style.backgroundColor = "transparent")
@@ -233,12 +237,7 @@ export default function AdminPage() {
     </div>
   </div>
 
-  {/* Footer fixo */}
-  <Footer style={{ position: "fixed", bottom: 0, width: "100%", height: "80px" }} />
-</div>
-
-
-
-
+  <Footer/>
+  </div>
   );
 }

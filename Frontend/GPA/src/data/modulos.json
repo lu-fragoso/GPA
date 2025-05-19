@@ -1,0 +1,20 @@
+[
+  {
+    "curso_id": "550e8400-e29b-41d4-a716-446655440000",
+    "id": "1",
+    "nome": "Introdução ao React",
+    "descricao": "Apresentação dos conceitos e primeiros componentes."
+  },
+  {
+    "curso_id": "550e8400-e29b-41d4-a716-446655440000",
+    "id": "2",
+    "nome": "JSX e Props",
+    "descricao": "Como trabalhar com JSX e propriedades."
+  },
+  {
+    "curso_id": "550e8400-e29b-41d4-a716-44665544000",
+    "id": "3",
+    "nome": "Seletores CSS",
+    "descricao": "Uso de seletores e classes para estilização."
+  }
+]

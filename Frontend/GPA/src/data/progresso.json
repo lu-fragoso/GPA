@@ -1,0 +1,22 @@
+[
+  {
+    "aluno_id": "1c9a9e56-3769-4a2b-bf44-013d2ee3a14e",
+    "curso_id": "550e8400-e29b-41d4-a716-446655440003",
+    "progresso": 85
+  },
+  {
+    "aluno_id": "1c9a9e56-3769-4a2b-bf44-013d2ee3a14e",
+    "curso_id": "550e8400-e29b-41d4-a716-446655440004",
+    "progresso": 70
+  },
+  {
+    "aluno_id": "5e8b7dc5-1d3f-4a0b-81d5-5b345a85e4d7",
+    "curso_id": "550e8400-e29b-41d4-a716-446655440004",
+    "progresso": 95
+  },
+  {
+    "aluno_id": "5e8b7dc5-1d3f-4a0b-81d5-5b345a85e4d7",
+    "curso_id": "550e8400-e29b-41d4-a716-446655440000",
+    "progresso": 88
+  }
+]

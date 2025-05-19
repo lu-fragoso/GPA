@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import alunos from "../data/alunos.json";
-import progresso from "../data/progresso.json";
-import materias from "../data/materias.json";
+import axios from "axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -82,8 +80,43 @@ export default function AlunoPage() {
   const { id } = useParams();
   const [aluno, setAluno] = useState(null);
   const [materiasDoAluno, setMateriasDoAluno] = useState([]);
+  
+  const [progresso, setProgresso] = useState([]);
+  const [cursos, setCursos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    async function fetchDados() {
+      try {
+        setLoading(true);
+        // Buscar dados do aluno
+        const resAluno = await axios.get(`http://localhost:3000/alunos/${id}`);
+        setAluno(resAluno.data);
+
+        // Buscar progresso do aluno
+        const resProgresso = await axios.get(`http://localhost:3000/progresso/${id}`);
+        setProgresso(resProgresso.data);
+
+        // Buscar todos os cursos
+        const resCursos = await axios.get("http://localhost:3000/cursos");
+        setCursos(resCursos.data);
+
+        setLoading(false);
+      } catch (err) {
+        setError("Erro ao carregar os dados.");
+        setLoading(false);
+      }
+    }
+
+    fetchDados();
+  }, [id]);
+
+
+
+
+
+  /*useEffect(() => {
     const alunoEncontrado = alunos.find((a) => a.id === id);
     setAluno(alunoEncontrado);
 
@@ -101,9 +134,11 @@ export default function AlunoPage() {
         });
       setMateriasDoAluno(materiasEncontradas);
     }
-  }, [id]);
+  }, [id]);*/
 
-  if (!aluno) return <p>Carregando aluno...</p>;
+  //if (!aluno) return <p>Carregando aluno...</p>;
+  if (loading) return <p>Carregando...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div style={styles.container}>
@@ -126,12 +161,21 @@ export default function AlunoPage() {
           ) : (
             <div style={styles.materiasContainerWrapper}>
               <div style={styles.materiasContainer}>
-                {materiasDoAluno.map((materia) => (
-                  <div key={materia.id} style={styles.materiaCard}>
-                    <div style={styles.materiaNome}>{materia.nome}</div>
-                    <div style={styles.notaText}>{materia.progresso}</div>
-                  </div>
-                ))}
+                <ul>
+                  {progresso.map((p) => {
+                    // Encontrar o nome do curso pelo id do curso no progresso
+                    const curso = cursos.find((c) => c.id === p.cursoId);
+                    return (
+                      <li key={p.cursoId}>
+                        {curso ? curso.nome : "Curso desconhecido"} - Progresso: {p.status || p.porcentagem || "N/A"}
+                      </li>
+                    );
+                  })}
+                </ul>
+
+
+
+                
               </div>
             </div>
           )}
@@ -141,3 +185,10 @@ export default function AlunoPage() {
     </div>
   );
 }
+
+/*{materiasDoAluno.map((materia) => (
+                  <div key={materia.id} style={styles.materiaCard}>
+                    <div style={styles.materiaNome}>{materia.nome}</div>
+                    <div style={styles.notaText}>{materia.progresso}</div>
+                  </div>
+                ))}*/

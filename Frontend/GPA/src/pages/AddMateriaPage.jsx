@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import axios from "axios";
 
 export default function AddMateriaPage() {
   const [className, setClassName] = useState("");
@@ -10,30 +11,56 @@ export default function AddMateriaPage() {
   const [classLevel, setClassLevel] = useState("");
   const navigate = useNavigate();
 
-  const handleAddClass = () => {
-    if (className.trim() === "") {
-      alert("Nome da matéria não pode estar vazio!");
-      return;
-    }
-    if (classDescription.trim() === "") {
-      alert("Descrição da matéria não pode estar vazia!");
-      return;
-    }
-    if (classTime.trim() === "") {
-      alert("Duração da matéria não pode estar vazia!");
-      return;
-    }
-    if (classLevel.trim() === "") {
-      alert("Nível da matéria não pode estar vazio!");
-      return;
-    }
+  const handleAddClass = async (e) => {
+  e.preventDefault();
 
-    console.log("Nova matéria:", { className, classDescription, classTime, classLevel });
+  if (className.trim() === "") {
+    alert("Nome da matéria não pode estar vazio!");
+   
+    return;
+  }
+  if (classDescription.trim() === "") {
+    alert("Descrição da matéria não pode estar vazia!");
 
-    // Aqui pode inserir a chamada API para salvar a matéria
+    return;
+  }
+  if (classTime.trim() === "") {
+    alert("Duração da matéria não pode estar vazia!");
+  
+    return;
+  }
+  if (classLevel.trim() === "") {
+    alert("Nível da matéria não pode estar vazio!");
+   
+    return;
+  }
 
-    navigate("/admin");
-  };
+  console.log("Nova matéria:", { className, classDescription, classTime, classLevel });
+
+  try {
+    const payload = {
+      nome: className,
+      descricao: classDescription,
+      duracao: parseInt(classTime, 10),
+      nivel: classLevel,
+    };
+
+    const response = await axios.post("http://localhost:3000/cursos", payload);
+  
+
+    navigate("/admin"); // Navega só se deu certo
+  } catch (error) {
+    alert("Erro ao adicionar matéria. Tente novamente.");
+    console.error(error);
+  } finally {
+    setClassName("");
+    setClassDescription("");
+    setClassTime("");
+    setClassLevel("");
+    
+  }
+};
+
 
   const styles = {
     container: {

@@ -1,30 +1,53 @@
-import { useState } from "react";
+import { useState,useEffect  } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import alunos from "../data/alunos.json";
+import axios from "axios";
 
 export default function HomePage() {
   
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
+  const [alunos, setAlunos] = useState([]);
   const navigate = useNavigate();
+
+  // Ao montar o componente, carrega a lista de alunos do backend
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/alunos")  // rota do backend que retorna alunos
+      .then((res) => {
+        setAlunos(res.data);  // salva no estado alunos
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar alunos", error);
+      });
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Simulação de autenticação
-    if (usuario === "admin" && senha === "admin1234") {
-      sessionStorage.setItem("usuarioLogado", JSON.stringify({ perfil: "admin", usuario }));
-      navigate("/admin");
-    } else {
-      const alunoEncontrado = alunos.find((a) => a.email === usuario);
 
-      if (alunoEncontrado && senha === "12345") {
-        sessionStorage.setItem("usuarioLogado", JSON.stringify({ perfil: "aluno", usuario, id: alunoEncontrado.id }));
-        navigate(`/aluno/${alunoEncontrado.id}`);
-      } else {
-        alert("Credenciais inválidas.");
-      }
+    // Se for admin, faz login direto
+    if (usuario === "admin" && senha === "admin1234") {
+      sessionStorage.setItem(
+        "usuarioLogado",
+        JSON.stringify({ perfil: "admin", usuario })
+      );
+      navigate("/admin");
+      return;
+    }
+
+    // Procura aluno pelo email (usuario) na lista carregada
+    const alunoEncontrado = alunos.find((a) => a.email === usuario);
+
+    // Verifica se o aluno foi encontrado e se a senha bate (aqui senha fixa só pra teste)
+    if (alunoEncontrado && senha === "12345") {
+      sessionStorage.setItem(
+        "usuarioLogado",
+        JSON.stringify({ perfil: "aluno", usuario, id: alunoEncontrado.id })
+      );
+      navigate(`/aluno/${alunoEncontrado.id}`);
+    } else {
+      alert("Credenciais inválidas.");
     }
   };
 

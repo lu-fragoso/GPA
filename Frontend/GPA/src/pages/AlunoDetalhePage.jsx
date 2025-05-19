@@ -43,9 +43,22 @@ export default function AlunoDetalhePage() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col" style={{ height: "100vh" }}>
+      {/* Header */}
       <Header />
-      <div className="p-6">
+    
+      {/* Conteúdo com rolagem central */}
+      <div
+        className="flex-1"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          overflowY: "auto",
+          padding: "24px",
+          backgroundColor: "#f9fafb",
+          paddingBottom: "100px", // reserva espaço pro footer
+        }}
+      >
         <h1 className="text-3xl font-bold mb-6">Detalhes do Aluno</h1>
         <p><strong>Nome:</strong> {aluno.nome}</p>
         <p><strong>Idade:</strong> {aluno.idade}</p>
@@ -82,7 +95,7 @@ export default function AlunoDetalhePage() {
           )}
         </div>
       </div>
-      <Footer />
-    </div>
+        <Footer style={{ position: "fixed", bottom: 0, width: "100%", height: "80px" }} />
+      </div>
   );
 }

@@ -28,7 +28,28 @@
     "nivel": "Intermediário"
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "nome": "Física Aplicada",
+    "descricao": "Curso avançado de física com aplicações práticas.",
+    "duracao": 90,
+    "nivel": "Avançado"
+  },
+   {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "nome": "Física Aplicada",
+    "descricao": "Curso avançado de física com aplicações práticas.",
+    "duracao": 90,
+    "nivel": "Avançado"
+  },
+   {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "nome": "Física Aplicada",
+    "descricao": "Curso avançado de física com aplicações práticas.",
+    "duracao": 90,
+    "nivel": "Avançado"
+  },
+   {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
     "nome": "Física Aplicada",
     "descricao": "Curso avançado de física com aplicações práticas.",
     "duracao": 90,

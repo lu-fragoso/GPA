@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import axios from "axios";
 
 export default function AddMateriaPage() {
   const [className, setClassName] = useState("");
@@ -10,30 +11,54 @@ export default function AddMateriaPage() {
   const [classLevel, setClassLevel] = useState("");
   const navigate = useNavigate();
 
-  const handleAddClass = () => {
-    if (className.trim() === "") {
-      alert("Nome da matéria não pode estar vazio!");
-      return;
-    }
-    if (classDescription.trim() === "") {
-      alert("Descrição da matéria não pode estar vazia!");
-      return;
-    }
-    if (classTime.trim() === "") {
-      alert("Duração da matéria não pode estar vazia!");
-      return;
-    }
-    if (classLevel.trim() === "") {
-      alert("Nível da matéria não pode estar vazio!");
-      return;
-    }
+  const handleAddClass = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setErro(null);
 
-    console.log("Nova matéria:", { className, classDescription, classTime, classLevel });
+  if (className.trim() === "") {
+    alert("Nome da matéria não pode estar vazio!");
+    setLoading(false);
+    return;
+  }
+  if (classDescription.trim() === "") {
+    alert("Descrição da matéria não pode estar vazia!");
+    setLoading(false);
+    return;
+  }
+  if (classTime.trim() === "") {
+    alert("Duração da matéria não pode estar vazia!");
+    setLoading(false);
+    return;
+  }
+  if (classLevel.trim() === "") {
+    alert("Nível da matéria não pode estar vazio!");
+    setLoading(false);
+    return;
+  }
 
-    // Aqui pode inserir a chamada API para salvar a matéria
+  console.log("Nova matéria:", { className, classDescription, classTime, classLevel });
 
-    navigate("/admin");
-  };
+  try {
+    const payload = {
+      nome: className,
+      descricao: classDescription,
+      duracao: parseInt(classTime, 10),
+      nivel: classLevel,
+    };
+
+    const response = await axios.post("http://localhost:3000/api/materias", payload);
+  
+
+    navigate("/admin"); // Navega só se deu certo
+  } catch (error) {
+    setErro("Erro ao criar matéria. Tente novamente.");
+    console.error(error);
+  } finally {
+    setLoading(false); // Sempre desliga o loading
+  }
+};
+
 
   const styles = {
     container: {

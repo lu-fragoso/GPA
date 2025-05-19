@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
@@ -83,78 +83,77 @@ const styles = {
 
 export default function MateriaDetalhePage() {
   const { id } = useParams();
+
   const [materia, setMateria] = useState(null);
   const [modulosDaMateria, setModulosDaMateria] = useState([]);
-  
-  
-  if (!materia) {
-    return <div style={{ padding: 24 }}>Matéria não encontrada.</div>;
-  }
-  
-  
-  useEffect(() => {
-  buscarMateria();
-}, []);
-
-const buscarMateria = async () => {
-  try {
-    const res = await axios.get(`http://localhost:3000/materias/${id}`);
-    setMateria(res.data);
-  } catch (error) {
-    console.error("Erro ao carregar matéria", error);
-  }
-};
-
-
-useEffect(() => {
-  buscarModulos();
-}, []);
-
-const buscarModulos = async () => {
-  try {
-    const res = await axios.get(`http://localhost:3000/modulos/${id}`);
-    setModulosDaMateria(res.data);
-  } catch (error) {
-    console.error("Erro ao carregar módulos", error);
-  }
-};
-
   const [novoModulo, setNovoModulo] = useState({
     nome: "",
     descricao: "",
   });
 
+  // Buscar matéria
+  useEffect(() => {
+    const buscarMateria = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/cursos/${id}`);
+        setMateria(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Erro ao carregar matéria", error);
+      }
+    };
+
+    buscarMateria();
+  }, [id]);
+
+  // Buscar módulos
+  useEffect(() => {
+    const buscarModulos = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/modulos/${id}`);
+        setModulosDaMateria(res.data);
+      } catch (error) {
+        console.error("Erro ao carregar módulos", error);
+      }
+    };
+
+    buscarModulos();
+  }, [id]);
+
+  // Handle inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNovoModulo((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Adicionar módulo
   const adicionarModulo = async () => {
-  if (!novoModulo.nome || !novoModulo.descricao) {
-    alert("Preencha todos os campos para adicionar um módulo.");
-    return;
-  }
+    if (!novoModulo.nome || !novoModulo.descricao) {
+      alert("Preencha todos os campos para adicionar um módulo.");
+      return;
+    }
 
-  const novo = {
-    id: uuidv4(),
-    curso_id: id,
-    nome: novoModulo.nome,
-    descricao: novoModulo.descricao,
+    const novo = {
+      id: uuidv4(),
+      curso_id: id,
+      nome: novoModulo.nome,
+      descricao: novoModulo.descricao,
+    };
+
+    try {
+      await axios.post("http://localhost:3000/modulos", novo);
+      setModulosDaMateria((prev) => [...prev, novo]);
+      setNovoModulo({ nome: "", descricao: "" });
+    } catch (error) {
+      console.error("Erro ao adicionar módulo", error);
+      alert("Erro ao adicionar módulo");
+    }
   };
 
-  try {
-    await axios.post("http://localhost:3000/modulos", novo);
-
-    // Atualiza a lista local sem precisar refazer o GET
-    setModulosDaMateria((prev) => [...prev, novo]);
-    setNovoModulo({ nome: "", descricao: "" });
-
-  } catch (error) {
-    console.error("Erro ao adicionar módulo", error);
-    alert("Erro ao adicionar módulo");
+  // Condição de carregamento
+  if (!materia) {
+    return <div style={{ padding: 24 }}>Matéria não encontrada.</div>;
   }
-};
-
   return (
     <div style={styles.container}>
       <Header />

@@ -100,12 +100,9 @@ export default function AddAlunoPage() {
   const handleGetData = async () => {
     try {
       
-
        const resCursos = await axios.get("http://localhost:3000/cursos");
-       
        setClasses(resCursos.data);
-
-     
+    
     } catch (err) {
       console.error("Erro ao buscar dados:", err);
     }
@@ -117,65 +114,66 @@ export default function AddAlunoPage() {
     handleGetData();
   }, []);
 
-  const handleAddStudent = async (e) => {
-  e.preventDefault();
-
-
-  if (studentName.trim() === "") {
-    alert("Nome do aluno não pode estar vazio!");
-   
-    return;
-  }
-  if (studentsAge === "") {
-    alert("Idade do aluno não pode estar vazia!");
-   
-    return;
-  }
-  if (studentsClass === "") {
-    alert("Selecione uma turma!");
-    
-    return;
-  }
-
+  const handleAddStudent = async () => {
   try {
-    const payload = {
+    console.log("Dados do aluno:", {
+      nome: studentName,
+      idade: studentsAge,
+      email: studentsEmail,
+      curso: studentsClass,
+    });
+
+    // 1. Buscar o curso
+    const resTurma = await axios.get(`http://localhost:3000/cursos?nome=${studentsClass}`);
+    const studentsClassData = resTurma.data[0];
+    
+    if (!studentsClassData) {
+      alert("Curso não encontrado!");
+      return;
+    }
+
+    const cursoId = studentsClassData.id;
+
+    // 2. Buscar os módulos do curso
+    const resModulos = await axios.get(`http://localhost:3000/modulos?curso_id=${cursoId}`);
+    const modulosDaMateria = resModulos.data;
+
+    // Verificar se módulos foram encontrados
+    if (!modulosDaMateria.length) {
+      alert("Nenhum módulo encontrado para esse curso!");
+      return;
+    }
+
+    // 3. Criar aluno
+    const resAluno = await axios.post("http://localhost:3000/alunos", {
       nome: studentName,
       idade: parseInt(studentsAge, 10),
       email: studentsEmail,
-      curso: studentsClass,
-    };
+      curso: cursoId,
+    });
 
-    // Cria aluno
-    const response = await axios.post("http://localhost:3000/alunos", payload);
-    const alunoId = response.data.id;
+    const alunoId = resAluno.data.id;
+    console.log("Aluno criado com ID:", alunoId);
 
-    // Pega módulos da matéria
-    const resModulos = await axios.get(`http://localhost:3000/modulos?curso_id=${studentsClass}`);
-    const modulosDaMateria = resModulos.data;
+    // 4. Criar progresso para cada módulo
+   
 
-    // Cria progresso inicial para cada módulo (concluido: false)
-    for (const modulo of modulosDaMateria) {
-      await axios.post("http://localhost:3000/progresso_modulos", {
-        aluno_id: alunoId,
-        curso_id: studentsClass,
-        modulo_id: modulo.id,
-        concluido: false,
-      });
-    }
-
-    alert("Aluno cadastrado com sucesso!");
+    alert("Aluno e progresso cadastrados com sucesso!");
     navigate("/admin");
+
   } catch (error) {
     console.error("Erro ao cadastrar aluno:", error);
-    alert("Erro ao cadastrar aluno. Tente novamente.");
+    alert("Erro ao cadastrar aluno. Corrija o problema antes de tentar novamente.");
   } finally {
+    // Limpar campos
     setStudentName("");
     setStudentsAge("");
     setstudentsEmail("");
     setStudentsClass("");
-   
   }
 };
+
+
 
 
   return (

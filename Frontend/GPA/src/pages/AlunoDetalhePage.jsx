@@ -1,9 +1,7 @@
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import alunos from "../data/alunos.json";
-import materias from "../data/materias.json";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
 
 const styles = {
@@ -140,9 +138,9 @@ useEffect(() => {
 const carregarDados = async () => {
   try {
     const resAluno = await axios.get(`http://localhost:3000/alunos/${id}`);
-    const resMaterias = await axios.get(`http://localhost:3000/materias`);
+    const resMaterias = await axios.get(`http://localhost:3000/cursos`);
     const resModulos = await axios.get(`http://localhost:3000/modulos`);
-    const resProgresso = await axios.get(`http://localhost:3000/progresso/${id}`);
+   // const resProgresso = await axios.get(`http://localhost:3000/progresso/${id}`);
 
     setAluno(resAluno.data);
     setMaterias(resMaterias.data);
@@ -159,10 +157,10 @@ const carregarDados = async () => {
   }
 
   // Filtra matérias que aluno já tem (usado para mostrar notas e status)
-  const materiasDoAluno = materias.filter((materia) => turma.includes(materia.id));
+  const materiasDoAluno = materias.filter((materia) => materias.includes(materia.id));
 
   // Matérias disponíveis para adicionar (não estão na turma)
-  const materiasDisponiveis = materias.filter((materia) => !turma.includes(materia.id));
+  const materiasDisponiveis = materias.filter((materia) => !materias.includes(materia.id));
 
   const handleInputChange = (materiaId, valor) => {
     setInputs((prev) => ({ ...prev, [materiaId]: valor }));
@@ -223,7 +221,7 @@ const carregarDados = async () => {
     return;
   }
 
-  if (turma.includes(novaMateriaId)) {
+  if (materias.includes(novaMateriaId)) {
     alert("Esta matéria já está na turma do aluno.");
     return;
   }
@@ -248,7 +246,7 @@ const carregarDados = async () => {
     }
 
     // Atualiza estado local pra refletir a mudança sem precisar reload
-    setTurma((prev) => [...prev, novaMateriaId]);
+    setMaterias((prev) => [...prev, novaMateriaId]);
     setNovaMateriaId("");
     alert("Matéria adicionada com sucesso!");
   } catch (error) {

@@ -98,7 +98,7 @@ export default function MateriaDetalhePage() {
 
 const buscarMateria = async () => {
   try {
-    const res = await axios.get(`http://localhost:3000/api/materias/${id}`);
+    const res = await axios.get(`http://localhost:3000/materias/${id}`);
     setMateria(res.data);
   } catch (error) {
     console.error("Erro ao carregar matéria", error);
@@ -112,7 +112,7 @@ useEffect(() => {
 
 const buscarModulos = async () => {
   try {
-    const res = await axios.get(`http://localhost:3000/api/modulos/${id}`);
+    const res = await axios.get(`http://localhost:3000/modulos/${id}`);
     setModulosDaMateria(res.data);
   } catch (error) {
     console.error("Erro ao carregar módulos", error);
@@ -143,7 +143,7 @@ const buscarModulos = async () => {
   };
 
   try {
-    await axios.post("http://localhost:3000/api/modulos", novo);
+    await axios.post("http://localhost:3000/modulos", novo);
 
     // Atualiza a lista local sem precisar refazer o GET
     setModulosDaMateria((prev) => [...prev, novo]);

@@ -14,7 +14,7 @@ export default function HomePage() {
   // Ao montar o componente, carrega a lista de alunos do backend
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/alunos")  // rota do backend que retorna alunos
+      .get("http://localhost:3000/alunos")  // rota do backend que retorna alunos
       .then((res) => {
         setAlunos(res.data);  // salva no estado alunos
       })

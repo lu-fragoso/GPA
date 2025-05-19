@@ -139,10 +139,10 @@ useEffect(() => {
 
 const carregarDados = async () => {
   try {
-    const resAluno = await axios.get(`http://localhost:3000/api/alunos/${id}`);
-    const resMaterias = await axios.get(`http://localhost:3000/api/materias`);
-    const resModulos = await axios.get(`http://localhost:3000/api/modulos`);
-    const resProgresso = await axios.get(`http://localhost:3000/api/progresso/${id}`);
+    const resAluno = await axios.get(`http://localhost:3000/alunos/${id}`);
+    const resMaterias = await axios.get(`http://localhost:3000/materias`);
+    const resModulos = await axios.get(`http://localhost:3000/modulos`);
+    const resProgresso = await axios.get(`http://localhost:3000/progresso/${id}`);
 
     setAluno(resAluno.data);
     setMaterias(resMaterias.data);
@@ -186,13 +186,13 @@ const carregarDados = async () => {
       progresso: nota 
     };
 
-    await axios.post(`http://localhost:3000/api/progresso`, progressoPayload);
+    await axios.post(`http://localhost:3000/progresso`, progressoPayload);
 
     // Marca todos os módulos daquele curso como concluídos
     const modulosDoCurso = modulos.filter((m) => m.curso_id === cursoId);
 
     for (const modulo of modulosDoCurso) {
-      await axios.post(`http://localhost:3000/api/progresso_modulos`, {
+      await axios.post(`http://localhost:3000/progresso_modulos`, {
         aluno_id: aluno.id,
         curso_id: cursoId,
         modulo_id: modulo.id,
@@ -230,7 +230,7 @@ const carregarDados = async () => {
 
   try {
     // Atualiza curso do aluno
-    await axios.put(`http://localhost:3000/api/alunos/${aluno.id}`, {
+    await axios.put(`http://localhost:3000/alunos/${aluno.id}`, {
       curso: novaMateriaId,
     });
 
@@ -239,7 +239,7 @@ const carregarDados = async () => {
 
     // Cria progresso inicial para cada módulo
     for (const modulo of modulosDaMateria) {
-      await axios.post(`http://localhost:3000/api/progresso_modulos`, {
+      await axios.post(`http://localhost:3000/progresso_modulos`, {
         aluno_id: aluno.id,
         curso_id: novaMateriaId,
         modulo_id: modulo.id,

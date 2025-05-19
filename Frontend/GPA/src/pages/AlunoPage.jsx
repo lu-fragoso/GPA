@@ -91,15 +91,15 @@ export default function AlunoPage() {
       try {
         setLoading(true);
         // Buscar dados do aluno
-        const resAluno = await axios.get(`http://localhost:3000/api/alunos/${id}`);
+        const resAluno = await axios.get(`http://localhost:3000/alunos/${id}`);
         setAluno(resAluno.data);
 
         // Buscar progresso do aluno
-        const resProgresso = await axios.get(`http://localhost:3000/api/progresso/${id}`);
+        const resProgresso = await axios.get(`http://localhost:3000/progresso/${id}`);
         setProgresso(resProgresso.data);
 
         // Buscar todos os cursos
-        const resCursos = await axios.get("http://localhost:3000/api/cursos");
+        const resCursos = await axios.get("http://localhost:3000/cursos");
         setCursos(resCursos.data);
 
         setLoading(false);

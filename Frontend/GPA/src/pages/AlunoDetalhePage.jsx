@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import alunos from "../data/alunos.json";
 import materias from "../data/materias.json";
 import { useState } from "react";
+import axios from "axios";
 
 const styles = {
   container: {
@@ -121,15 +122,37 @@ const styles = {
 };
 
 export default function AlunoDetalhePage() {
-  const { id } = useParams();
-  const aluno = alunos.find((a) => a.id === id);
+ const { id } = useParams();
 
-  // Para controlar a turma local (matérias do aluno), porque dados importados são estáticos
-  const [turma, setTurma] = useState(aluno ? aluno.turma : []);
-  const [notas, setNotas] = useState({});
-  const [inputs, setInputs] = useState({});
-  const [inputFocus, setInputFocus] = useState(null);
-  const [novaMateriaId, setNovaMateriaId] = useState("");
+const [aluno, setAluno] = useState(null);
+const [materias, setMaterias] = useState([]);
+const [modulos, setModulos] = useState([]);
+const [progresso, setProgresso] = useState([]);
+const [notas, setNotas] = useState({});
+const [inputs, setInputs] = useState({});
+const [novaMateriaId, setNovaMateriaId] = useState("");
+
+// Carregar dados
+useEffect(() => {
+  carregarDados();
+}, []);
+
+const carregarDados = async () => {
+  try {
+    const resAluno = await axios.get(`http://localhost:3000/api/alunos/${id}`);
+    const resMaterias = await axios.get(`http://localhost:3000/api/materias`);
+    const resModulos = await axios.get(`http://localhost:3000/api/modulos`);
+    const resProgresso = await axios.get(`http://localhost:3000/api/progresso/${id}`);
+
+    setAluno(resAluno.data);
+    setMaterias(resMaterias.data);
+    setModulos(resModulos.data);
+    setProgresso(resProgresso.data);
+  } catch (error) {
+    console.error("Erro ao carregar dados", error);
+  }
+};
+
 
   if (!aluno) {
     return <div style={styles.alunoNaoEncontrado}>Aluno não encontrado.</div>;
@@ -145,16 +168,47 @@ export default function AlunoDetalhePage() {
     setInputs((prev) => ({ ...prev, [materiaId]: valor }));
   };
 
-  const enviarNota = (materiaId) => {
-    const nota = Number(inputs[materiaId]);
-    if (isNaN(nota) || nota < 0 || nota > 10) {
-      alert("Informe uma nota válida entre 0 e 10.");
-      return;
+  const enviarNota = async (cursoId) => {
+  const nota = Number(inputs[cursoId]);
+  if (isNaN(nota) || nota < 0 || nota > 10) {
+    alert("Informe uma nota válida entre 0 e 10.");
+    return;
+  }
+
+  setNotas((prev) => ({ ...prev, [cursoId]: nota }));
+  setInputs((prev) => ({ ...prev, [cursoId]: "" }));
+
+  try {
+    
+    const progressoPayload = {
+      aluno_id: aluno.id,
+      curso_id: cursoId,
+      progresso: nota 
+    };
+
+    await axios.post(`http://localhost:3000/api/progresso`, progressoPayload);
+
+    // Marca todos os módulos daquele curso como concluídos
+    const modulosDoCurso = modulos.filter((m) => m.curso_id === cursoId);
+
+    for (const modulo of modulosDoCurso) {
+      await axios.post(`http://localhost:3000/api/progresso_modulos`, {
+        aluno_id: aluno.id,
+        curso_id: cursoId,
+        modulo_id: modulo.id,
+        concluido: true,
+      });
     }
 
-    setNotas((prev) => ({ ...prev, [materiaId]: nota }));
-    setInputs((prev) => ({ ...prev, [materiaId]: "" }));
-  };
+    alert("Nota registrada e progresso atualizado!");
+
+    // Atualiza dados
+    carregarDados();
+  } catch (error) {
+    console.error("Erro ao registrar nota", error);
+  }
+};
+
 
   const verificarStatus = (materiaId) => {
     const nota = notas[materiaId];
@@ -163,18 +217,46 @@ export default function AlunoDetalhePage() {
   };
 
   // Adiciona matéria nova à turma do aluno localmente
-  const adicionarMateria = () => {
-    if (!novaMateriaId) {
-      alert("Selecione uma matéria para adicionar.");
-      return;
+  const adicionarMateria = async () => {
+  if (!novaMateriaId) {
+    alert("Selecione uma matéria para adicionar.");
+    return;
+  }
+
+  if (turma.includes(novaMateriaId)) {
+    alert("Esta matéria já está na turma do aluno.");
+    return;
+  }
+
+  try {
+    // Atualiza curso do aluno
+    await axios.put(`http://localhost:3000/api/alunos/${aluno.id}`, {
+      curso: novaMateriaId,
+    });
+
+    // Pega os módulos da matéria
+    const modulosDaMateria = modulos.filter((m) => m.curso_id === novaMateriaId);
+
+    // Cria progresso inicial para cada módulo
+    for (const modulo of modulosDaMateria) {
+      await axios.post(`http://localhost:3000/api/progresso_modulos`, {
+        aluno_id: aluno.id,
+        curso_id: novaMateriaId,
+        modulo_id: modulo.id,
+        concluido: false,
+      });
     }
-    if (turma.includes(novaMateriaId)) {
-      alert("Esta matéria já está na turma do aluno.");
-      return;
-    }
+
+    // Atualiza estado local pra refletir a mudança sem precisar reload
     setTurma((prev) => [...prev, novaMateriaId]);
     setNovaMateriaId("");
-  };
+    alert("Matéria adicionada com sucesso!");
+  } catch (error) {
+    console.error("Erro ao adicionar matéria ao aluno", error);
+    alert("Erro ao adicionar matéria.");
+  }
+};
+
 
   return (
     <div style={styles.container}>

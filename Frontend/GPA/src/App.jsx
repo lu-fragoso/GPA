@@ -6,11 +6,15 @@ import AddAlunoPage from "./pages/AddAlunoPage";
 import AddMateriaPage from "./pages/AddMateriaPage";
 import AlunoDetalhePage from "./pages/AlunoDetalhePage";
 import MateriaDetalhePage from "./pages/MateriaDetalhePage";
+import ErrorBoundary from "./ErrorBoundary";
 
 
 function App() {
   return (
     <Router>
+      <ErrorBoundary>
+        
+      
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/aluno/:id" element={<AlunoPage />} />
@@ -20,6 +24,7 @@ function App() {
         <Route path="/admin/aluno/:id" element={<AlunoDetalhePage />} />
         <Route path="/admin/materia/:id" element={<MateriaDetalhePage />} />
       </Routes>
+      </ErrorBoundary>
     </Router>
   );
 }
